@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ThalesTestAPI</name>
+    </assembly>
+    <members>
+        <member name="M:ThalesTestAPI.Controllers.EmployeesController.Get">
+            <summary>
+            Retrieve all employees
+            </summary>
+        </member>
+        <member name="M:ThalesTestAPI.Controllers.EmployeesController.Get(System.Int32)">
+            <summary>
+            Get specific employee
+            </summary>
+            /// <param name="id">Employee id.</param>
+        </member>
+    </members>
+</doc>

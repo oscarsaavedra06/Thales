@@ -1,0 +1,138 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Employees</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div className="form-group float-right">
+
+
+            <div class="input-group searchBox">
+                <label className="text-black font-w500">
+                    Employee id :
+                </label>
+                <input type="text" class="onlyNumber" name="name" value="" id="txtEmployeeId" />
+                <input type="button" name="name" class="btn btn-success" value="Search" onclick="getEmployees()" />
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <div class="col-md-12" id="employeesGrid" style="padding:0px"></div>
+</div>
+
+<style>
+    .searchBox {
+        justify-content: center;
+        gap: 10px;
+        margin-top: 25px;
+        margin-bottom: 30px;
+    }
+</style>
+
+<script>
+
+    var employeesApiUrl ="@ViewData["employeesApiUrl"].ToString()"
+    $(document).ready(function () {
+
+       // getEmployees(0);
+    });
+
+    function getEmployees() {
+
+        var employeeId = $("#txtEmployeeId").val() === "" ? "" : "/" + $("#txtEmployeeId").val()
+
+        $.ajax({
+            type: "GET",
+            url: employeesApiUrl + employeeId,
+            async: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                
+                var data = []
+                if (response.data && response.data.length > 0) {
+                data = [...response.data]
+                } else {
+                    if(response.data!=null)
+                    data.push(response.data)
+                }
+
+                $("#employeesGrid").html("").kendoGrid({
+
+
+                    dataSource: {
+                        type: "json",
+                        data: data,
+                        pageSize: 10
+                    },
+
+                    columns: [
+                        {
+                            field: "id", title: "Id",
+                             
+                            editable: false
+                        },
+                        {
+                            field: "employee_name", title: "Employee Name",
+                             
+                            editable: false
+                        },
+                        {
+                            field: "employee_age", title: "Employee Age",
+                             
+                            editable: false
+                        },
+                        {
+                            field: "employee_salary", title: "Employee Salary",
+                            editable: false,
+                            template: function (dataItem) {
+                                return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'USD' }).format(dataItem.employee_salary)
+
+                            }
+                        },
+                        {
+                            field: "employee_anual_salary", title: "Employee Anual Salary",
+                            editable: false,
+                            template: function (dataItem) {
+                                return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'USD' }).format(dataItem.employee_anual_salary)
+
+                            }
+                        },
+
+                    ],
+                    editable: false,
+                    resizable: true,
+                    pageSize: 10,
+                    sortable: false,
+                    pageable: {
+                        input: false,
+                        numeric: true,
+                        pageSizes: [10, 20, 50, 100],
+                        previousNext: true,
+                        butonCount: 5
+                    },
+                    scrollable: true,
+                    groupable: false,
+                    filterable: false,
+                });
+            },
+            failure: function (response) {
+
+
+            },
+            error: function (response) {
+
+            }
+        });
+
+
+    }
+</script>
